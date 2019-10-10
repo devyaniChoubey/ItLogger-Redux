@@ -6,6 +6,11 @@ import SearchBar from './components/layout/SearchBar';
 import Logs from './components/logs/Logs';
 import AddBtn from './components/layout/AddBtn';
 import AddLogBtn from './components/logs/AddLogModel';
+import EditLogBtn from './components/logs/EditLogModel';
+import AddTechModel from './components/techs/AddTechModal';
+import TechListModal from './components/techs/TechListModal';
+import { Provider } from 'react-redux';
+import store from './store';
 
 const App = () => {
   useEffect(() => {
@@ -13,14 +18,21 @@ const App = () => {
     M.AutoInit();
   })
   return (
-    <Fragment>
-      <SearchBar />
-      <div class="container">
-        <Logs />
-        <AddLogBtn />
-        <AddBtn />
-      </div>
-    </Fragment>
+    <Provider store={store}>
+      <Fragment>
+        <SearchBar />
+        <div class="container">
+          <AddBtn />
+
+          <AddLogBtn />
+          <EditLogBtn />
+          <AddTechModel />
+          <TechListModal />
+          <Logs />
+
+        </div>
+      </Fragment>
+    </Provider>
   );
 }
 
