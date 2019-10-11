@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import M from 'materialize-css/dist/js/materialize.min.js';
 import { addLog } from '../../actions/logActions';
 import { connect } from 'react-redux';
+import TechSelectOptions from '../techs/TechSelectOptions';
 
 const AddLogModel = ({ addLog }) => {
     const [message, setMessage] = useState('');
@@ -42,11 +43,12 @@ const AddLogModel = ({ addLog }) => {
                 </div>
                 <div className="row">
                     <div class="input-field col s12">
-                        <select onChange={e => setTech(e.target.value)}>
+                        <select name='tech'
+                            value={tech}
+                            className='browser-default'
+                            onChange={e => setTech(e.target.value)}>
                             <option value="" disabled selected>Select Technicians</option>
-                            <option value="1">Sam Smith</option>
-                            <option value="2">John Doe</option>
-                            <option value="3">Sara Williams</option>
+                            <TechSelectOptions />
                         </select>
                     </div>
                 </div>

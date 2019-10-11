@@ -1,17 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import M from 'materialize-css/dist/js/materialize.min.js';
+import { connect } from 'react-redux';
+import { updateLog } from '../../actions/logActions';
+import TechSelectOptions from '../techs/TechSelectOptions';
 
-const EditLogModel = () => {
+
+const EditLogModel = ({ updateLog, current }) => {
     const [message, setMessage] = useState('');
     const [tech, setTech] = useState('');
     const [attention, setAttention] = useState(false);
 
-    const onSubmit = () => {
+    useEffect(() => {
+        if (current) {
+            setMessage(current.message)
+            setTech(current.tech)
+            setAttention(current.attention)
+
+        }
+    }, [current])
+
+
+    const onSubmit = (e) => {
+        e.preventDefault()
         if (message === '' || tech === '') {
             M.toast({ html: 'Please enter a message and tech' })
         } else {
-            console.log();
+            const updLog = {
+                id: current.id,
+                message,
+                attention,
+                tech,
+                date: new Date()
+            }
 
+            updateLog(updLog);
+
+            M.toast({ html: `Log updated by ${tech}` })
             setMessage('');
             setAttention(false);
             setTech('');
@@ -26,16 +50,14 @@ const EditLogModel = () => {
                         <input type="text" value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             name="message" />
-                        <label htmlFor="message" className="active">Log Message</label>
+
                     </div>
                 </div>
                 <div className="row">
                     <div class="input-field col s12">
-                        <select onChange={e => setTech(e.target.value)}>
+                        <select value={tech} className="browser-default" name="tech" onChange={e => setTech(e.target.value)}>
                             <option value="" disabled selected>Select Technicians</option>
-                            <option value="1">Sam Smith</option>
-                            <option value="2">John Doe</option>
-                            <option value="3">Sara Williams</option>
+                            <TechSelectOptions />
                         </select>
                     </div>
                 </div>
@@ -60,4 +82,8 @@ const EditLogModel = () => {
     )
 }
 
-export default EditLogModel
+const mapStateToProps = state => ({
+    current: state.log.current
+})
+
+export default connect(mapStateToProps, { updateLog })(EditLogModel);
